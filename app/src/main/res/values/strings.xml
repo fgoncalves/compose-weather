@@ -10,4 +10,11 @@
       the License.
       -->
     <string name="app_name">AndroidDevChallenge</string>
+    <string name="feels">Feels like %$1s</string>
+    <string name="remote_error_title">Server Error</string>
+    <string name="remote_error_message">The service seems to be down now. Try again later please.</string>
+    <string name="no_network_error_title">No Internet</string>
+    <string name="no_network_error_message">Please check your internet connection</string>
+    <string name="unknown_error_title">Ooops</string>
+    <string name="unknown_error_message">Something went wrong</string>
 </resources>

@@ -22,40 +22,49 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.androiddevchallenge.ui.state.AppState
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.viewmodels.MviViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    internal lateinit var mainViewModel: MviViewModel<AppState>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycle.addObserver(mainViewModel)
+
         setContent {
             MyTheme {
-                MyApp()
+                MyApp(mainViewModel)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(mainViewModel)
     }
 }
 
 // Start building your app here!
 @Composable
-fun MyApp() {
+fun MyApp(
+    viewModel: MviViewModel<AppState>,
+) {
+    val state by viewModel.state.collectAsState()
+
+    val weatherForecast = state.weatherForecast
+
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
-    }
-}
-
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+        if (weatherForecast.dailyForecast.isEmpty())
+            Text(text = "No temps were found!")
+        else
+            Text(text = weatherForecast.dailyForecast[weatherForecast.currentDay].avgTemp)
     }
 }
