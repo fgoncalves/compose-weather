@@ -4,7 +4,9 @@
 
 package com.example.androiddevchallenge.ui.state
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.VisibleForTesting
+import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.commons.C
 import com.example.androiddevchallenge.commons.F
 import com.example.androiddevchallenge.commons.K
@@ -64,8 +66,33 @@ private fun Forecast.toDayForecast(
         realFeel = feelsLike.asTemperature(unit).format(),
         maxTemp = hourlyBreakdown.maxTemp().toUnit(unit).format(),
         minTemp = hourlyBreakdown.minTemp().toUnit(unit).format(),
+        background = backgroundResource(),
         hourlyForecast = hourlyBreakdown.map { it.toHourForecast(format, unit) }
     )
+
+@DrawableRes
+private fun Forecast.backgroundResource() =
+    when (weather[0].icon) {
+        "01d" -> R.drawable.clear_skies_day
+        "01n" -> R.drawable.clear_skies_night
+
+        "02d" -> R.drawable.few_clouds_day
+        "02n" -> R.drawable.few_clouds_night
+
+        "03d", "03n", "04d", "04n" -> R.drawable.scattered_clouds
+
+        "09d", "09n" -> R.drawable.shower_rain
+
+        "10d", "10n" -> R.drawable.rain
+
+        "11d", "11n" -> R.drawable.thunderstorms
+
+        "13d", "13n" -> R.drawable.snow
+
+        "50d", "50n" -> R.drawable.mist
+
+        else -> R.drawable.clear_skies_day
+    }
 
 private fun Forecast.toHourForecast(
     format: DateTimeFormatter = DateTimeFormat.forPattern("HH:mm"),

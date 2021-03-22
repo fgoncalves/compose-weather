@@ -18,12 +18,17 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import com.example.androiddevchallenge.ui.state.AppState
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.ui.viewmodels.MviViewModel
@@ -62,9 +67,15 @@ fun MyApp(
     val weatherForecast = state.weatherForecast
 
     Surface(color = MaterialTheme.colors.background) {
-        if (weatherForecast.dailyForecast.isEmpty())
+        if (weatherForecast.dailyForecast.isEmpty()) {
             Text(text = "No temps were found!")
-        else
-            Text(text = weatherForecast.dailyForecast[weatherForecast.currentDay].avgTemp)
+        } else {
+            Image(
+                painter = painterResource(id = weatherForecast.dailyForecast[weatherForecast.currentDay].background),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
     }
 }

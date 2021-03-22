@@ -1,5 +1,6 @@
 package com.example.androiddevchallenge.ui.state
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
 enum class TemperatureUnit {
@@ -19,6 +20,8 @@ data class DayForecast(
     val realFeel: String,
     val maxTemp: String,
     val minTemp: String,
+    @DrawableRes
+    val background: Int,
     val hourlyForecast: List<HourForecast> = emptyList(),
 )
 
